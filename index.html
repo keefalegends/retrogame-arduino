@@ -22,6 +22,9 @@
       <button id="connectBtn" class="btn btn-primary">
         <span>🔌</span> Hubungkan Arduino
       </button>
+      <button id="calibrateBtn" class="btn btn-secondary" title="Setel posisi joystick saat ini sebagai titik tengah">
+        <span>🎯</span> Kalibrasi Tengah
+      </button>
       <button id="soundBtn" class="btn btn-secondary" title="Nyalakan / Matikan Suara">
         <span>🔊</span> Audio: ON
       </button>
@@ -35,6 +38,12 @@
   </header>
 
   <div class="main-content">
+    <!-- Diagnostic Alert Box if Stick Stuck -->
+    <div id="stickAlert" class="alert-box" style="display: none;">
+      ⚠️ <strong>Perhatian:</strong> Nilai Joystick terbaca mentok di <strong>1023, 1023</strong>. 
+      Jika joystick sedang posisi diam di tengah, pastikan kabel <strong>GND</strong> modul KY-023 terpasang kuat ke GND Arduino, atau klik tombol <strong>"🎯 Kalibrasi Tengah"</strong>.
+    </div>
+
     <!-- Game Canvas -->
     <div class="game-viewport">
       <canvas id="gameCanvas" width="800" height="600"></canvas>
@@ -60,6 +69,7 @@
             X: <span id="hudX" style="color: var(--neon-yellow);">512</span> 
             Y: <span id="hudY" style="color: var(--neon-cyan);">512</span>
           </div>
+          <div id="calibHint" style="font-size: 10px; color: #64748b; margin-top: 2px;">Pusat: 512, 512</div>
         </div>
         <div class="joystick-indicator-box">
           <div class="joystick-dot" id="joyDot"></div>
@@ -102,7 +112,7 @@
           <tr>
             <td><span class="badge">GND</span></td>
             <td><span class="badge">GND</span></td>
-            <td>Ground Daya</td>
+            <td>Ground Daya (Wajib terpasang erat)</td>
           </tr>
           <tr>
             <td><span class="badge">+5V</span></td>
@@ -122,7 +132,7 @@
           <tr>
             <td><span class="badge">SW</span></td>
             <td><span class="badge">D2</span></td>
-            <td>Pushbutton Tombol Tembak</td>
+            <td>Pushbutton Tombol Tembak & Mulai</td>
           </tr>
         </tbody>
       </table>
@@ -130,9 +140,9 @@
       <div style="margin-top: 12px; font-size: 13px; color: #94a3b8; line-height: 1.6;">
         <strong style="color: #fff;">💡 Tips Penting:</strong>
         <ol style="margin-left: 20px; margin-top: 4px;">
-          <li>Pastikan <strong>Serial Monitor di Arduino IDE sudah ditutup</strong> sebelum menekan tombol <em>"Hubungkan Arduino"</em> di browser (satu port COM hanya bisa dipakai satu aplikasi sekaligus).</li>
-          <li>Gunakan browser modern berbasis Chromium seperti <strong>Google Chrome</strong> atau <strong>Microsoft Edge</strong> yang mendukung Web Serial API.</li>
-          <li>Bisa juga dimainkan menggunakan keyboard: <span class="badge">W,A,S,D</span> atau tombol panah untuk bergerak, dan <span class="badge">Spasi</span> untuk menembak.</li>
+          <li><strong>Mulai & Lanjut Main:</strong> Tekan joystick ke dalam (tombol SW), atau tekan tombol <span class="badge">Spasi</span> / <span class="badge">Enter</span>, atau <strong>klik layar game</strong>.</li>
+          <li>Pastikan <strong>Serial Monitor di Arduino IDE sudah ditutup</strong> sebelum menekan tombol <em>"Hubungkan Arduino"</em> di browser.</li>
+          <li>Jika joystick terasa miring saat tidak disentuh, letakkan joystick di posisi tengah lalu klik tombol <strong>"🎯 Kalibrasi Tengah"</strong>.</li>
         </ol>
       </div>
     </div>

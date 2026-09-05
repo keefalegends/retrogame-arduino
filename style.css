@@ -282,3 +282,17 @@ canvas#gameCanvas {
   color: var(--neon-cyan);
   border: 1px solid var(--border-neon);
 }
+
+.alert-box {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 71, 87, 0.2);
+  border: 1px solid #ff4757;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #ffb8b8;
+  line-height: 1.5;
+  box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+}
+
