@@ -789,6 +789,15 @@ function spawnPowerup(x, y) {
 // 5. GAME LOOP & STATE MANAGEMENT
 // ==========================================
 function updateGame() {
+  // Screen shake decay (berjalan di setiap frame agar getaran mereda dengan cepat dan mulus)
+  if (screenShake > 0) screenShake *= 0.82;
+  if (screenShake < 0.2) screenShake = 0;
+
+  // Pastikan di layar Game Over / Start getaran langsung 0 agar teks tidak bergetar
+  if (gameState !== STATE.PLAYING) {
+    screenShake = 0;
+  }
+
   // Starfield update berjalan selalu di semua state
   for (const star of stars) {
     star.y += star.speed;
@@ -831,10 +840,6 @@ function updateGame() {
     }
     return;
   }
-
-  // Screen shake decay
-  if (screenShake > 0) screenShake *= 0.88;
-  if (screenShake < 0.2) screenShake = 0;
 
   // Update Pemain
   player.update();
@@ -1021,7 +1026,7 @@ function updateGame() {
 
 function handlePlayerHit() {
   sfx.playHit();
-  screenShake = 12;
+  screenShake = 5; // Getaran lembut dan tidak berlebihan (sebelumnya 12)
   player.lives--;
   player.invulnerableTimer = 90;
 
@@ -1029,6 +1034,7 @@ function handlePlayerHit() {
     sfx.playGameOver();
     gameState = STATE.GAMEOVER;
     gameOverCooldown = 40; // 0.6 detik jeda perlindungan
+    screenShake = 0; // Matikan getaran seketika saat kalah agar teks Game Over stabil
   }
 }
 
@@ -1036,16 +1042,17 @@ function handlePlayerHit() {
 // 6. RENDER ENGINE
 // ==========================================
 function render() {
-  ctx.save();
+  // 1. Bersihkan layar kanvas secara stabil (tanpa getaran)
+  ctx.fillStyle = '#03040e';
+  ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-  if (screenShake > 0) {
+  // 2. Terapkan getaran HANYA ke dunia objek game (asteroid, laser, pesawat) saat bermain
+  ctx.save();
+  if (screenShake > 0 && gameState === STATE.PLAYING) {
     const shakeX = (Math.random() - 0.5) * screenShake;
     const shakeY = (Math.random() - 0.5) * screenShake;
     ctx.translate(shakeX, shakeY);
   }
-
-  ctx.fillStyle = '#03040e';
-  ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
   // Stars
   for (const s of stars) {
@@ -1169,9 +1176,13 @@ function render() {
   // Render Pemain jika PLAYING
   if (gameState === STATE.PLAYING) {
     player.draw();
+  }
 
-    // In-game HUD
-    ctx.save();
+  // 3. SELESAI DUNIA PERMAINAN: Pulihkan kanvas sehingga UI, HUD, dan Teks TIDAK PERNAH bergetar!
+  ctx.restore();
+
+  // In-game HUD
+  if (gameState === STATE.PLAYING) {
     ctx.font = '14px "Press Start 2P"';
     ctx.fillStyle = '#00f0ff';
     ctx.fillText(`SCORE: ${score}`, 20, 36);
@@ -1268,8 +1279,6 @@ function render() {
 
     ctx.restore();
   }
-
-  ctx.restore();
 }
 
 function startGame() {
