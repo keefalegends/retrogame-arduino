@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galactic Defender - Arduino Joystick Retro Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-area">
+      <span style="font-size: 24px;">🚀</span>
+      <div>
+        <h1 class="game-title">GALACTIC DEFENDER</h1>
+        <small style="color: #64748b; font-size: 11px;">Arduino Joystick (KY-023) Retro Arcade</small>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <button id="connectBtn" class="btn btn-primary">
+        <span>🔌</span> Hubungkan Arduino
+      </button>
+      <button id="soundBtn" class="btn btn-secondary" title="Nyalakan / Matikan Suara">
+        <span>🔊</span> Audio: ON
+      </button>
+      <button id="invertXBtn" class="btn btn-secondary" title="Balik arah sumbu X">
+        Invert X: OFF
+      </button>
+      <button id="invertYBtn" class="btn btn-secondary" title="Balik arah sumbu Y">
+        Invert Y: OFF
+      </button>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <!-- Game Canvas -->
+    <div class="game-viewport">
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <div class="crt-overlay"></div>
+    </div>
+
+    <!-- Live Hardware HUD -->
+    <div class="hud-panel">
+      <!-- Status Port -->
+      <div class="hud-card">
+        <div>
+          <div class="hud-card-title">Port Serial</div>
+          <div id="connStatus" class="hud-value" style="color: #ff4757; font-size: 11px;">TERPUTUS</div>
+        </div>
+        <div style="font-size: 20px;" id="connIcon">⚪</div>
+      </div>
+
+      <!-- Live Joystick Indicator -->
+      <div class="hud-card">
+        <div>
+          <div class="hud-card-title">Joystick KY-023</div>
+          <div class="hud-value" style="font-size: 11px;">
+            X: <span id="hudX" style="color: var(--neon-yellow);">512</span> 
+            Y: <span id="hudY" style="color: var(--neon-cyan);">512</span>
+          </div>
+        </div>
+        <div class="joystick-indicator-box">
+          <div class="joystick-dot" id="joyDot"></div>
+        </div>
+      </div>
+
+      <!-- Tombol SW -->
+      <div class="hud-card">
+        <div>
+          <div class="hud-card-title">Tombol SW (Tembak)</div>
+          <div id="hudBtnStatus" class="btn-indicator" style="margin-top: 4px;">RELEASED</div>
+        </div>
+        <div style="font-size: 20px;" id="btnIcon">🕹️</div>
+      </div>
+
+      <!-- High Score -->
+      <div class="hud-card">
+        <div>
+          <div class="hud-card-title">Skor Tertinggi</div>
+          <div id="hudHighScore" class="hud-value" style="color: var(--neon-green);">00000</div>
+        </div>
+        <div style="font-size: 20px;">🏆</div>
+      </div>
+    </div>
+
+    <!-- Wiring & Panduan Cepat -->
+    <div class="info-section">
+      <div class="info-title">
+        <span>⚡</span> Skema Rangkaian Pin (KY-023 ke Arduino)
+      </div>
+      <table class="wiring-table">
+        <thead>
+          <tr>
+            <th>Pin KY-023</th>
+            <th>Pin Arduino</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">GND</span></td>
+            <td><span class="badge">GND</span></td>
+            <td>Ground Daya</td>
+          </tr>
+          <tr>
+            <td><span class="badge">+5V</span></td>
+            <td><span class="badge">5V</span></td>
+            <td>Power Supply 5V</td>
+          </tr>
+          <tr>
+            <td><span class="badge">VRx</span></td>
+            <td><span class="badge">A0</span></td>
+            <td>Analog Sumbu X (Kiri / Kanan)</td>
+          </tr>
+          <tr>
+            <td><span class="badge">VRy</span></td>
+            <td><span class="badge">A1</span></td>
+            <td>Analog Sumbu Y (Atas / Bawah)</td>
+          </tr>
+          <tr>
+            <td><span class="badge">SW</span></td>
+            <td><span class="badge">D2</span></td>
+            <td>Pushbutton Tombol Tembak</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 12px; font-size: 13px; color: #94a3b8; line-height: 1.6;">
+        <strong style="color: #fff;">💡 Tips Penting:</strong>
+        <ol style="margin-left: 20px; margin-top: 4px;">
+          <li>Pastikan <strong>Serial Monitor di Arduino IDE sudah ditutup</strong> sebelum menekan tombol <em>"Hubungkan Arduino"</em> di browser (satu port COM hanya bisa dipakai satu aplikasi sekaligus).</li>
+          <li>Gunakan browser modern berbasis Chromium seperti <strong>Google Chrome</strong> atau <strong>Microsoft Edge</strong> yang mendukung Web Serial API.</li>
+          <li>Bisa juga dimainkan menggunakan keyboard: <span class="badge">W,A,S,D</span> atau tombol panah untuk bergerak, dan <span class="badge">Spasi</span> untuk menembak.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

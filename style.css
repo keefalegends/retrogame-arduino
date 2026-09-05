@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap');
+
+:root {
+  --bg-dark: #090a16;
+  --panel-bg: rgba(18, 20, 39, 0.85);
+  --neon-cyan: #00f0ff;
+  --neon-pink: #ff0077;
+  --neon-yellow: #ffe600;
+  --neon-green: #00ff66;
+  --text-main: #e2e8f0;
+  --border-neon: rgba(0, 240, 255, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px 18px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-neon);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(255, 0, 119, 0.5);
+  letter-spacing: 1px;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
+  color: #050a1b;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+}
+
+.btn-primary.connected {
+  background: linear-gradient(135deg, #00ff66 0%, #009944 100%);
+  color: #03200b;
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--neon-cyan);
+}
+
+/* Main Layout */
+.main-content {
+  width: 100%;
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Game Canvas Container */
+.game-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-width: 800px;
+  background: #000;
+  border: 2px solid var(--border-neon);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+canvas#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #03040c;
+}
+
+/* CRT Scanline Overlay */
+.crt-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 10;
+  opacity: 0.6;
+}
+
+/* Hardware Live HUD */
+.hud-panel {
+  width: 100%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.hud-card {
+  background: var(--panel-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hud-card-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8f9bb3;
+}
+
+.hud-value {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: var(--neon-cyan);
+}
+
+/* Virtual Joystick Indicator */
+.joystick-indicator-box {
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.joystick-dot {
+  width: 14px;
+  height: 14px;
+  background: var(--neon-pink);
+  border-radius: 50%;
+  position: absolute;
+  top: calc(50% - 7px);
+  left: calc(50% - 7px);
+  box-shadow: 0 0 8px var(--neon-pink);
+  transition: transform 0.05s ease-out;
+}
+
+.btn-indicator {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #8f9bb3;
+}
+
+.btn-indicator.active {
+  background: var(--neon-yellow);
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 10px var(--neon-yellow);
+}
+
+/* Info & Wiring Box */
+.info-section {
+  width: 100%;
+  max-width: 800px;
+  background: var(--panel-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.info-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--neon-yellow);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wiring-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.wiring-table th, .wiring-table td {
+  padding: 6px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wiring-table th {
+  color: var(--neon-cyan);
+  font-weight: bold;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--neon-cyan);
+  border: 1px solid var(--border-neon);
+}
