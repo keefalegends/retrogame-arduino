@@ -1,4 +1,4 @@
-# 🚀 Galactic Defender - Arduino Joystick Retro Game
+#  Galactic Defender - Arduino Joystick Retro Game
 
 Game arcade retro luar angkasa (**Galactic Defender**) yang dikendalikan langsung oleh **Arduino** menggunakan modul analog joystick **KY-023** melalui kabel USB (**Web Serial API**).
 
